@@ -40,7 +40,7 @@ module.exports = nextConfig
 #### GitHub Actions 워크플로우 (.github/workflows/deployment.yml)
 
 ```yaml
-name: Deploy Next.js to S3 and invalidate CloudFront
+name: 배포 워크플로우 (Next.js, S3, CloudFront)
 
 on:
   push:
@@ -53,27 +53,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: 코드 체크아웃
         uses: actions/checkout@v2
 
-      - name: Install dependencies
+      - name: 노드 버전 설정 (ver.20)
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: 프로젝트 의존성 설치
         run: npm ci
 
-      - name: Build
+      - name: 프로젝트 빌드
         run: npm run build
 
-      - name: Configure AWS credentials
+      - name: AWS 자격 증명 설정
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Deploy to S3
+      - name: S3에 배포
         run: |
           aws s3 sync out/ s3://${{ secrets.S3_BUCKET_NAME }} --delete
 
-      - name: Invalidate CloudFront cache
+      - name: CloudFront 캐시 무효화
         run: |
           aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
 ```
