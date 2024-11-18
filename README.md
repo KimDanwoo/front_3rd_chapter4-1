@@ -4,7 +4,7 @@
 
 AWS S3를 이용해서 Next.js 애플리케이션의 정적 파일을 호스팅하고,</br> CloudFront를 활용해서 콘텐츠를 효율적으로 전달하는 CDN을 구성한 후,</br> Next.js 프로젝트에 GitHub Actions를 통한 자동 배포 파이프라인을 구축하여</br> 개발 생산성을 향상시킨 프로젝트입니다.
 
-![파이프라인 dialog](image-1.png)
+![alt text](./app/assets/images/flow.png)
 
 ## 상세 구현 내용
 
