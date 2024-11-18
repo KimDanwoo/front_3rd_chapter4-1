@@ -83,7 +83,7 @@ jobs:
           aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
 ```
 
-#### GitHub Secrets 설정
+### 4. GitHub Secrets 설정
 
 필요한 시크릿 값:
 
@@ -93,7 +93,7 @@ jobs:
 - S3_BUCKET_NAME : 빌드 산출물을 업로드할 S3 버킷 이름
 - CLOUDFRONT_DISTRIBUTION_ID : S3과 연결된 CloudFront 배포 ID
 
-### 4. 배포 프로세스
+### 5. 배포 프로세스
 
 1. 작업사항을 feature브랜치에 올린 후 개발 branch에 merge
 2. 개발 브랜치(개발 서버가 있을경우)에서 작동 확인 후 main브랜치에 pr요청
@@ -103,7 +103,15 @@ jobs:
 6. 빌드된 파일을 S3에 업로드
 7. CloudFront 캐시 무효화
 
-### 5. 주요 개념
+### 6. 주요 이점
+
+- 자동화된 배포로 인한 개발 생산성 향상
+- CloudFront CDN을 통한 글로벌 콘텐츠 전송
+- S3 정적 호스팅을 통한 비용 효율적인 운영
+
+## 참고 사항
+
+### 1. 주요 개념
 
 #### [**GitHub Actions과 CI/CD 도구**](https://github.com/resources/articles/devops/ci-cd)
 
@@ -126,13 +134,7 @@ CloudFront는 엣지 로케이션에서 콘텐츠를 캐싱하여 제공합니�
 
 GitHub Repository의 Secrets 설정을 통해 AWS 인증 정보와 같은 민감한 정보를 안전하게 관리합니다. 이 값들은 워크플로우 실행 시 환경변수로 주입되어 사용됩니다.
 
-### 6. 주요 이점
-
-- 자동화된 배포로 인한 개발 생산성 향상
-- CloudFront CDN을 통한 글로벌 콘텐츠 전송
-- S3 정적 호스팅을 통한 비용 효율적인 운영
-
-### 7. 실무 적용시 고려사항
+### 2. 실무 적용시 고려사항
 
 #### DNS 및 도메인 설정
 
