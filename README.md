@@ -95,15 +95,14 @@ jobs:
 - S3_BUCKET_NAME : 빌드 산출물을 업로드할 S3 버킷 이름
 - CLOUDFRONT_DISTRIBUTION_ID : S3과 연결된 CloudFront 배포 ID
 
-### 5. 배포 프로세스
+### 5. 배포 프로세스 (Git flow)
 
-1. 작업사항을 feature브랜치에 올린 후 개발 branch에 merge
-2. 개발 브랜치(개발 서버가 있을경우)에서 작동 확인 후 main브랜치에 pr요청
-3. 코드리뷰가 완료되면 main브랜치에 merge
-4. GitHub Actions 워크플로우 자동 실행
-5. Next.js 프로젝트 빌드
-6. 빌드된 파일을 S3에 업로드
-7. CloudFront 캐시 무효화
+1. 작업사항을 feature브랜치에 올린 후 main브랜치에 pr요청
+2. 코드리뷰가 완료되면 main브랜치에 merge
+3. GitHub Actions 워크플로우 자동 실행
+4. Next.js 프로젝트 빌드
+5. 빌드된 파일을 S3에 업로드
+6. CloudFront 캐시 무효화
 
 ### 6. 주요 이점
 
@@ -112,6 +111,53 @@ jobs:
 - S3 정적 호스팅을 통한 비용 효율적인 운영
 
 </br>
+
+## 성능 분석
+
+<div style="display: flex; justify-content: space-around;">
+  <img src="./app/assets/images/before.png" width="35%" alt="S3 성능"/>
+  <img src="./app/assets/images/after.png" width="35%" alt="CloudFront 성능"/>
+</div>
+
+</br>
+</br>
+
+실제 성능 측정 결과
+실제 배포된 Next.js 애플리케이션의 네트워크 응답을 분석한 결과입니다.
+
+1. 파일 크기 비교
+
+   | 파일명                       | S3 크기 | CloudFront 크기 | 감소율 |
+   | ---------------------------- | ------- | --------------- | ------ |
+   | fd9d1056-aa94ea5c2eabf904.js | 173 kB  | 51.1 kB         | 70.5%  |
+   | 117-b2ec9b1a6eddcaeb.js      | 124 kB  | 30.6 kB         | 75.3%  |
+   | webpack-0dae0f0b0d2941b8.js  | 3.8 kB  | 1.9 kB          | 50%    |
+
+2. 응답 시간 비교
+
+   | 리소스 유형 | S3 응답 시간 | CloudFront 응답 시간 | 개선율   |
+   | ----------- | ------------ | -------------------- | -------- |
+   | JavaScript  | 26-83ms      | 12-34ms              | 최대 59% |
+   | CSS         | 31ms         | 16ms                 | 48%      |
+   | 폰트        | 31-35ms      | 17-18ms              | 약 45%   |
+   | 기타 리소스 | 28-49ms      | 11-12ms              | 최대 75% |
+
+3. 성능 최적화
+
+   - 엣지 로케이션을 통한 빠른 컨텐츠 전송
+   - 효율적인 캐싱으로 응답 시간 단축
+
+4. 안정성 향상
+
+   - 글로벌 CDN 네트워크 활용
+   - 원본 서버(S3) 부하 감소
+   - 일관된 응답 시간 제공
+
+5. 비용 효율성
+
+   - 대역폭 사용량 감소
+   - 전송 비용 최적화
+   - 서버 리소스 사용 효율화
 
 ## 참고 사항
 
