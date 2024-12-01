@@ -197,6 +197,3 @@ SNS를 통한 배포 결과 알림
 S3 버킷 정책 최소 권한 원칙 적용
 CloudFront OAI 설정
 WAF 규칙 적용 (필요시)
-
-
-test
